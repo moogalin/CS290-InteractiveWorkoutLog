@@ -24,9 +24,10 @@ function viewLog(event){
 			
 			for (var i in response) {
 				console.log("Name " + response[i].name + "\n");
-				console.log("ID " + response[i].id + "\n");
-				console.log("Done " + response[i].done + "\n");
-				console.log("Due " + response[i].done + "\n");	
+				console.log("Reps " + response[i].reps + "\n");
+				console.log("Weight " + response[i].weight + "\n");
+				console.log("Date " + response[i].date + "\n");
+				console.log("Lbs " + response[i].lbs + "\n");	
 			}
 	
 		}
