@@ -34,6 +34,21 @@ app.get('/view',function(req,res,next){
 	});
 });
 
+app.get('/one', function(req, res, next){
+  var context = {};
+  	mysql.pool.query("SELECT * FROM workouts WHERE id=?", [req.query.id], function(err, result){
+    		if(err){
+      			next(err);
+      		return;
+    		}
+	
+	//Send data to client
+	res.send(JSON.stringify(result));
+
+	});
+});
+
+
 app.get('/insert',function(req,res,next){
   var context = {};
   mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?,?,?,?,?)", 
@@ -61,26 +76,7 @@ app.get('/delete',function(req,res,next){
   });
 });
 
-/*
-///simple-update?id=2&name=The+Task&done=false&due=2015-12-5
-app.get('/simple-update',function(req,res,next){
-  var context = {};
-  mysql.pool.query("UPDATE todo SET name=?, done=?, due=? WHERE id=? ",
-    [req.query.name, req.query.done, req.query.due, req.query.id],
-    function(err, result){
-    if(err){
-      next(err);
-      return;
-    }
-    context.results = "Updated " + result.changedRows + " rows.";
-    res.render('home',context);
-  });
-});
-*/
-
-
-///safe-update?id=1&name=The+Task&done=false
-app.get('/safe-update',function(req,res,next){
+app.get('/update',function(req,res,next){
   var context = {};
   mysql.pool.query("SELECT * FROM workouts WHERE id=?", [req.query.id], function(err, result){
     if(err){
@@ -96,8 +92,8 @@ app.get('/safe-update',function(req,res,next){
           next(err);
           return;
         }
-       // context.results = "Updated " + result.changedRows + " rows.";
-       // res.render('home',context);
+        context.results = "Updated " + result.changedRows + " rows.";
+        res.render('home',context);
       });
     }
   });
