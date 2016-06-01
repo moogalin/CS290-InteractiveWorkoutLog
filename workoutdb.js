@@ -42,9 +42,11 @@ app.get('/insert',function(req,res,next){
       next(err);
       return;
     }
-    context.results = "Inserted id " + result.insertId;
-    res.render('home',context);
-  });
+    //context.results = "Inserted id " + result.insertId;
+    //res.render('home',context);
+  	res.type('text/plain');
+	res.send('success');
+	});
 });
 
 app.get('/delete',function(req,res,next){
