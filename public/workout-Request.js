@@ -149,6 +149,7 @@ function viewLog(event){
 			var weightText = document.createTextNode(response[i].weight);
 			var dateText = document.createTextNode(response[i].date);
 			var lbsText = document.createTextNode(response[i].lbs);
+		
 			
 			var editButton = document.createElement('input');
 			editButton.setAttribute("type", "button");
@@ -168,15 +169,9 @@ function viewLog(event){
 			hidden2.setAttribute("value", response[i].id);
 			
 			deleteButton.setAttribute("onclick", "deleteRow(this)");
-			
+			editButton.setAttribute("onclick", "editRow(this)");			
 			editButton.appendChild(hidden2);
 			deleteButton.appendChild(hidden);	
-			/*
-			// Set up 'click' event for deleteButton
-			deleteButton.addEventListener = ("click",function(){
-				 deleteRow(this);
-			});
-			*/
 
 			// Append new row information to existing table
 			tbody.appendChild(newRow);
@@ -197,7 +192,6 @@ function viewLog(event){
 			e5.appendChild(lbsText);
 
 			newRow.appendChild(e6);
-		//	e6.appendChild(hidden);
 			e6.appendChild(editButton);
 			e6.appendChild(deleteButton);
 
@@ -248,6 +242,39 @@ function deleteRow(element) {
 	
 	viewLog();	
 	
+}
+
+function editRow(element){
+
+	var item = element.firstChild;
+	var idVal = item.getAttribute("value");
+	
+	console.log("Item with id " + idVal + " will be edited");
+
+	// Get row information prior to edit 
+	var url =  'http://52.24.243.214:3000/one' + "?id=" + idVal;
+	console.log("Edit url is: " + url);
+
+	var req = new XMLHttpRequest();
+	req.open('GET', url , true);
+
+	req.addEventListener('load', function() {
+		if(req.status >= 200 && req.status < 400){
+			console.log("View for edit successful");
+			var response = JSON.parse(req.responseText);
+			console.log(response);
+			
+		}
+
+
+		
+		
+		else {
+			console.log("Error in network request: " + req.statusText);
+		}
+	});
+	req.send(null);
+	//event.preventDefault();
 }
 
 	
