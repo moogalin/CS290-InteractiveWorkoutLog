@@ -126,15 +126,6 @@ function viewLog(event){
 				var parent = removeMe.parentNode;
 				parent.removeChild(removeMe);
 			}
-			/*
-			var deleteMyChildren = document.getElementById('tbody');
-				
-			if (deleteMyChildren != null) {			
-				while (deleteMyChildren.firstChild) {
-					deleteMyChildren.removeChild(deleteMyChildren.firstChild);
-				}
-			}
-			*/
 
 			var tb = document.getElementById('tableLog');
 			var tbody = document.createElement('tbody');
@@ -166,11 +157,27 @@ function viewLog(event){
 			var deleteButton = document.createElement('input');
 			deleteButton.setAttribute("type", "button");
 			deleteButton.setAttribute("value", "delete");
-
-			var hidden = document.createElement('input');
-			hidden.setAttribute("type", "hidden");
-			hidden.setAttribute("id", response[i].id);
+			deleteButton.setAttribute("onclick", "deleteRow");
 			
+			var hidden = document.createElement('form');
+			hidden.setAttribute("type", "hidden");
+			hidden.setAttribute("value", response[i].id);
+			
+			var hidden2 = document.createElement('form');
+			hidden2.setAttribute("type", "hidden");
+			hidden2.setAttribute("value", response[i].id);
+			
+			deleteButton.setAttribute("onclick", "deleteRow(this)");
+			
+			editButton.appendChild(hidden2);
+			deleteButton.appendChild(hidden);	
+			/*
+			// Set up 'click' event for deleteButton
+			deleteButton.addEventListener = ("click",function(){
+				 deleteRow(this);
+			});
+			*/
+
 			// Append new row information to existing table
 			tbody.appendChild(newRow);
 
@@ -190,7 +197,7 @@ function viewLog(event){
 			e5.appendChild(lbsText);
 
 			newRow.appendChild(e6);
-			e6.appendChild(hidden);
+		//	e6.appendChild(hidden);
 			e6.appendChild(editButton);
 			e6.appendChild(deleteButton);
 
@@ -216,4 +223,31 @@ function viewLog(event){
 	req.send(null);
 	//event.preventDefault();
 }
+
+function deleteRow(element) {
+
+	var item = element.firstChild;
+	var idVal = item.getAttribute("value");
+	
+	console.log("Item with id " + idVal + " will be deleted");
+
+	var url = 'http://52.24.243.214:3000/delete?id=' + idVal;
+	var req = new XMLHttpRequest();
+
+	req.open('GET', url, true);
+
+	req.addEventListener('load', function(){
+		if(req.status >= 200 && req.status < 400){
+			console.log("Deletion successful");
+		}
+		else {
+			console.log("Server Error: " + req.statusText);
+		}
+	});
+	req.send(null);
+	
+	viewLog();	
+	
+}
+
 	
