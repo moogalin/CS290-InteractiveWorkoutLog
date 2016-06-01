@@ -1,10 +1,12 @@
 
 
-document.addEventListener('DOMContentLoaded', bindButtons);
+document.addEventListener('DOMContentLoaded', bindButtons(event));
 
-function bindButtons() {
+
+function bindButtons(event) {
 	alert("Loaded buttons");
-
+	
+	viewLog(event);
 	document.getElementById('wSubmit').addEventListener('click', function(event) {
 		alert("clicked");
 		addWorkout(event);
@@ -118,13 +120,93 @@ function viewLog(event){
 			var response = JSON.parse(req.responseText);
 			console.log(response);
 			
+
+			var removeMe = document.getElementById('tbody');
+			if (removeMe != null) {
+				var parent = removeMe.parentNode;
+				parent.removeChild(removeMe);
+			}
+			/*
+			var deleteMyChildren = document.getElementById('tbody');
+				
+			if (deleteMyChildren != null) {			
+				while (deleteMyChildren.firstChild) {
+					deleteMyChildren.removeChild(deleteMyChildren.firstChild);
+				}
+			}
+			*/
+
+			var tb = document.getElementById('tableLog');
+			var tbody = document.createElement('tbody');
+			tbody.setAttribute("id", "tbody");
+
+
+			tb.appendChild(tbody);
+		
 			for (var i in response) {
+
+			var newRow = document.createElement('tr');
+			var e1 = document.createElement('td');
+			var e2 = document.createElement('td');
+			var e3 = document.createElement('td');
+			var e4 = document.createElement('td');
+			var e5 = document.createElement('td');
+			var e6 = document.createElement('td');
+
+			var nameText = document.createTextNode(response[i].name);
+			var repsText = document.createTextNode(response[i].reps);
+			var weightText = document.createTextNode(response[i].weight);
+			var dateText = document.createTextNode(response[i].date);
+			var lbsText = document.createTextNode(response[i].lbs);
+			
+			var editButton = document.createElement('input');
+			editButton.setAttribute("type", "button");
+			editButton.setAttribute("value", "edit");
+
+			var deleteButton = document.createElement('input');
+			deleteButton.setAttribute("type", "button");
+			deleteButton.setAttribute("value", "delete");
+
+			var hidden = document.createElement('input');
+			hidden.setAttribute("type", "hidden");
+			hidden.setAttribute("id", response[i].id);
+			
+			// Append new row information to existing table
+			tbody.appendChild(newRow);
+
+			newRow.appendChild(e1);
+			e1.appendChild(nameText);
+
+			newRow.appendChild(e2);
+			e2.appendChild(repsText);
+
+			newRow.appendChild(e3);
+			e3.appendChild(weightText);
+
+			newRow.appendChild(e4);
+			e4.appendChild(dateText);
+	
+			newRow.appendChild(e5);
+			e5.appendChild(lbsText);
+
+			newRow.appendChild(e6);
+			e6.appendChild(hidden);
+			e6.appendChild(editButton);
+			e6.appendChild(deleteButton);
+
+					
 				console.log("Name " + response[i].name + "\n");
 				console.log("Reps " + response[i].reps + "\n");
 				console.log("Weight " + response[i].weight + "\n");
 				console.log("Date " + response[i].date + "\n");
 				console.log("Lbs " + response[i].lbs + "\n");	
+
+
+
+
 			}
+
+
 	
 		}
 		else {
@@ -132,6 +214,6 @@ function viewLog(event){
 		}
 	});
 	req.send(null);
-	event.preventDefault();
+	//event.preventDefault();
 }
 	
